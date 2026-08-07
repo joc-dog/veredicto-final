@@ -1,0 +1,18 @@
+{
+  "name": "minima-infobae-sync",
+  "version": "1.0.0",
+  "description": "Scraper pipeline for importing news into Supabase using RSS feeds",
+  "main": "sync.js",
+  "type": "module",
+  "scripts": {
+    "sync": "node sync.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.5",
+    "fast-xml-parser": "^4.3.5"
+  },
+  "devDependencies": {
+    "puppeteer": "^25.5.0"
+  }
+}
