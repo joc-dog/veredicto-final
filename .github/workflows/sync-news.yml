@@ -2,8 +2,8 @@ name: Sincronizar Noticias RSS
 
 on:
   schedule:
-    # Se ejecuta cada 6 horas (horas: 00:00, 06:00, 12:00, 18:00 UTC)
-    - cron: '0 */6 * * *'
+    # Se ejecuta cada 30 minutos
+    - cron: '*/30 * * * *'
   workflow_dispatch:
     # Permite ejecutar manualmente desde el panel de GitHub
 
