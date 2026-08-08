@@ -154,6 +154,57 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     articleBody.innerHTML = paragraphs || "<p>Sin contenido disponible.</p>";
 
+    // Update Open Graph and Social Meta Tags
+    const ogTitle = document.getElementById("og-title");
+    const ogDesc = document.getElementById("og-desc");
+    const ogImage = document.getElementById("og-image");
+    const ogUrl = document.getElementById("og-url");
+    const twTitle = document.getElementById("tw-title");
+    const twDesc = document.getElementById("tw-desc");
+    const twImage = document.getElementById("tw-image");
+
+    if (ogTitle) ogTitle.content = `${art.title} | Veredicto Final`;
+    if (ogDesc) ogDesc.content = art.deck || art.title;
+    if (ogImage) ogImage.content = art.image_url || defaultImage;
+    if (ogUrl) ogUrl.content = window.location.href;
+    if (twTitle) twTitle.content = `${art.title} | Veredicto Final`;
+    if (twDesc) twDesc.content = art.deck || art.title;
+    if (twImage) twImage.content = art.image_url || defaultImage;
+
+    // Inject Schema.org JSON-LD Structured Data for Google News & Top Stories
+    const oldScript = document.getElementById("newsarticle-schema");
+    if (oldScript) oldScript.remove();
+
+    const schemaScript = document.createElement("script");
+    schemaScript.type = "application/ld+json";
+    schemaScript.id = "newsarticle-schema";
+    schemaScript.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": art.title,
+      "description": art.deck || art.title,
+      "image": [art.image_url || defaultImage],
+      "datePublished": new Date(art.published_at).toISOString(),
+      "dateModified": new Date(art.published_at).toISOString(),
+      "author": [{
+        "@type": "Person",
+        "name": art.author || "Redacción Veredicto Final"
+      }],
+      "publisher": {
+        "@type": "Organization",
+        "name": "Veredicto Final",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://veredictofinal.com/assets/colombia_hero.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": window.location.href
+      }
+    });
+    document.head.appendChild(schemaScript);
+
     // Setup social shares
     setupShareButtons(art);
   };

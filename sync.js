@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import { XMLParser } from 'fast-xml-parser';
 
@@ -252,8 +253,52 @@ async function runSync() {
     }
     
     console.log('🎉 Sincronización completada con éxito.');
+
+    // Auto-generate fresh sitemap.xml
+    await generateDynamicSitemap();
   } catch (err) {
     console.error('❌ ERROR CRÍTICO durante la ejecución:', err);
+  }
+}
+
+async function generateDynamicSitemap() {
+  try {
+    const { data: latestArticles, error } = await supabase
+      .from('articles')
+      .select('id, title, country_id, published_at')
+      .order('published_at', { ascending: false })
+      .limit(100);
+
+    if (error || !latestArticles) return;
+
+    const slugs = { CO: 'colombia', MX: 'mexico', US: 'usa', ES: 'espana' };
+    const generateSlug = (t) => t.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-").substring(0, 60);
+
+    let sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
+    
+    // Static main routes
+    sitemapXML += `  <url>\n    <loc>https://veredictofinal.com/</loc>\n    <changefreq>always</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+    sitemapXML += `  <url>\n    <loc>https://veredictofinal.com/colombia/</loc>\n    <changefreq>hourly</changefreq>\n    <priority>0.9</priority>\n    <xhtml:link rel="alternate" hreflang="es-CO" href="https://veredictofinal.com/colombia/"/>\n  </url>\n`;
+    sitemapXML += `  <url>\n    <loc>https://veredictofinal.com/mexico/</loc>\n    <changefreq>hourly</changefreq>\n    <priority>0.9</priority>\n    <xhtml:link rel="alternate" hreflang="es-MX" href="https://veredictofinal.com/mexico/"/>\n  </url>\n`;
+    sitemapXML += `  <url>\n    <loc>https://veredictofinal.com/usa/</loc>\n    <changefreq>hourly</changefreq>\n    <priority>0.9</priority>\n    <xhtml:link rel="alternate" hreflang="es-US" href="https://veredictofinal.com/usa/"/>\n  </url>\n`;
+    sitemapXML += `  <url>\n    <loc>https://veredictofinal.com/espana/</loc>\n    <changefreq>hourly</changefreq>\n    <priority>0.9</priority>\n    <xhtml:link rel="alternate" hreflang="es-ES" href="https://veredictofinal.com/espana/"/>\n  </url>\n`;
+
+    // Dynamic recent news articles
+    for (const art of latestArticles) {
+      const countrySlug = slugs[art.country_id] || 'colombia';
+      const newsSlug = generateSlug(art.title);
+      const articleUrl = `https://veredictofinal.com/article.html?pais=${countrySlug}&amp;noticia=${newsSlug}&amp;id=${art.id}`;
+      const pubDate = new Date(art.published_at).toISOString();
+
+      sitemapXML += `  <url>\n    <loc>${articleUrl}</loc>\n    <lastmod>${pubDate}</lastmod>\n    <changefreq>never</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+    }
+
+    sitemapXML += `</urlset>`;
+
+    fs.writeFileSync('sitemap.xml', sitemapXML, 'utf8');
+    console.log(`🗺️ Sitemap generado exitosamente con ${latestArticles.length} noticias.`);
+  } catch (err) {
+    console.error('Error generando sitemap:', err);
   }
 }
 

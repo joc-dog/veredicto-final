@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://veredictofinal.com/sitemap.xml
