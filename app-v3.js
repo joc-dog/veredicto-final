@@ -789,9 +789,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         format: (num) => `${(num / 1000).toFixed(1).replace(".", ",")} K suscriptores`,
         defaultState: true // Pre-subscribed mock
       },
-      zona_roja: {
+      sin_censura: {
+        name: "Veredicto Final Sin Censura",
         baseSubs: 445,
-        url: "https://www.youtube.com/@zonarojamexico",
+        url: "https://www.youtube.com/@veredictofinalsincensura",
         format: (num) => `${num} suscriptores`,
         defaultState: true
       },
@@ -847,7 +848,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateUI();
 
         if (isSubscribed) {
-          showToast("¡Suscrito!", `Te has suscrito a ${id === "zona_roja" ? "Zona Roja México" : id === "usa" ? "Veredicto Final USA" : id === "sin_filtros" ? "Veredicto Final Sin Filtros" : "Veredicto Final Sin Rollos"}.`, "success");
+          const chName = id === "sin_censura" ? "Veredicto Final Sin Censura" : id === "usa" ? "Veredicto Final USA" : id === "sin_filtros" ? "Veredicto Final Sin Filtros" : "Veredicto Final Sin Rollos";
+          showToast("¡Suscrito!", `Te has suscrito a ${chName}.`, "success");
         } else {
           showToast("Suscripción cancelada", "Has cancelado tu suscripción local.", "info");
         }
