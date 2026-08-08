@@ -12,10 +12,36 @@
   </script>
 
   <script>
-    // Root SEO redirect: Automatically route root hits to /colombia/
-    if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-      window.location.replace("/colombia/");
-    }
+    // Smart Geo & Preferred Country Auto-Detection
+    (function() {
+      if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+        // 1. Check if user has a previously saved manual preference
+        var saved = localStorage.getItem("user_preferred_country");
+        if (saved && ["colombia", "mexico", "usa", "espana"].indexOf(saved) !== -1) {
+          window.location.replace("/" + saved + "/");
+          return;
+        }
+
+        // 2. Auto-detect country based on Timezone & Locale (Default fallback: USA)
+        var detectedCountry = "usa";
+        try {
+          var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "").toLowerCase();
+          var lang = (navigator.language || "").toLowerCase();
+
+          if (tz.indexOf("bogota") !== -1 || lang === "es-co") {
+            detectedCountry = "colombia";
+          } else if (tz.indexOf("mexico") !== -1 || tz.indexOf("cancun") !== -1 || tz.indexOf("monterrey") !== -1 || tz.indexOf("tijuana") !== -1 || tz.indexOf("hermosillo") !== -1 || tz.indexOf("chihuahua") !== -1 || tz.indexOf("mazatlan") !== -1 || lang === "es-mx") {
+            detectedCountry = "mexico";
+          } else if (tz.indexOf("madrid") !== -1 || tz.indexOf("canary") !== -1 || tz.indexOf("ceuta") !== -1 || lang === "es-es") {
+            detectedCountry = "espana";
+          } else if (tz.indexOf("america") !== -1 || tz.indexOf("us/") !== -1 || tz.indexOf("honolulu") !== -1 || tz.indexOf("phoenix") !== -1 || tz.indexOf("new_york") !== -1 || tz.indexOf("los_angeles") !== -1 || tz.indexOf("chicago") !== -1 || tz.indexOf("denver") !== -1) {
+            detectedCountry = "usa";
+          }
+        } catch(e) {}
+
+        window.location.replace("/" + detectedCountry + "/");
+      }
+    })();
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -254,6 +280,6 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabaseConfig.js?v=2"></script>
-  <script src="/app-v3.js?v=22"></script>
+  <script src="/app-v3.js?v=23"></script>
 </body>
 </html>

@@ -360,6 +360,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           // Update URL dynamically without page reload
           const countrySlug = getCountrySlug(country.id);
           window.history.pushState(null, "", `/${countrySlug}/`);
+          localStorage.setItem("user_preferred_country", countrySlug);
 
           // Switch active class
           document.querySelectorAll(".country-btn").forEach(b => b.classList.remove("active"));
