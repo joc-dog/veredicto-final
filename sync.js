@@ -176,7 +176,13 @@ async function runSync() {
           
           // C. Deck (description) and Content
           const deck = cleanHTML(item.description || '');
-          const content = cleanHTML(item['content:encoded'] || item.description || '');
+          let content = cleanHTML(item['content:encoded'] || item.description || '');
+          
+          // Remove duplicate lead images or figures from body content
+          content = content
+            .replace(/<figure\b[^<]*(?:(?!<\/figure>)<[^<]*)*<\/figure>/gi, '')
+            .replace(/<img\b[^>]*>/gi, '')
+            .trim();
           
           // D. Date and Author
           const published_at = item.pubDate ? new Date(item.pubDate) : new Date();

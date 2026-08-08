@@ -145,14 +145,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     articleImage.src = art.image_url || defaultImage;
     articleImage.alt = art.title;
 
-    // Body content format (paragraphs)
-    const paragraphs = (art.content || "")
+    // Body content formatting & lead image deduplication
+    let cleanText = art.content || "";
+    
+    // Remove lead <img> and <figure> tags that duplicate the hero image
+    cleanText = cleanText
+      .replace(/<figure\b[^<]*(?:(?!<\/figure>)<[^<]*)*<\/figure>/gi, "")
+      .replace(/<img\b[^>]*>/gi, "");
+
+    const paragraphs = cleanText
       .split("\n\n")
       .filter(p => p.trim() !== "")
       .map(para => `<p>${para.replace(/\n/g, "<br>")}</p>`)
       .join("");
 
     articleBody.innerHTML = paragraphs || "<p>Sin contenido disponible.</p>";
+
+    // Post-render cleanup of any remaining duplicate images
+    const renderedImgs = articleBody.querySelectorAll("img, figure");
+    renderedImgs.forEach(el => {
+      el.remove();
+    });
 
     // Update Open Graph and Social Meta Tags
     const ogTitle = document.getElementById("og-title");
