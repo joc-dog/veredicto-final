@@ -101,7 +101,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const noticia = urlParams.get("noticia");
 
       if (pais !== correctCountrySlug || noticia !== correctSlug) {
-        const newUrl = `/article.html?pais=${correctCountrySlug}&noticia=${correctSlug}&id=${article.id}`;
+        const imgParam = article.image_url ? `&imagen=${encodeURIComponent(article.image_url)}` : "";
+        const newUrl = `/article.html?pais=${correctCountrySlug}&noticia=${correctSlug}&id=${article.id}${imgParam}`;
         window.history.replaceState(null, "", newUrl);
       }
 
@@ -272,8 +273,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const rawDate = new Date(art.published_at);
         const dateStr = rawDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 
+        const imgParam = art.image_url ? `&imagen=${encodeURIComponent(art.image_url)}` : "";
         return `
-          <a href="/article.html?pais=${getCountrySlug(art.country_id)}&noticia=${generateSlug(art.title)}&id=${art.id}" class="related-mini-card" style="text-decoration: none; color: inherit;">
+          <a href="/article.html?pais=${getCountrySlug(art.country_id)}&noticia=${generateSlug(art.title)}&id=${art.id}${imgParam}" class="related-mini-card" style="text-decoration: none; color: inherit;">
             <div class="related-mini-img-box">
               <img src="${art.image_url || defaultImg}" alt="${art.title}" class="related-mini-img">
             </div>

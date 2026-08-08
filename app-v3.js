@@ -664,7 +664,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       trendingList.innerHTML = trending.map((article, index) => {
         const catName = article.categories?.name || "General";
-        const articleLink = `/article.html?pais=${getCountrySlug(article.country_id)}&noticia=${generateSlug(article.title)}&id=${article.id}`;
+        const imgParam = article.image_url ? `&imagen=${encodeURIComponent(article.image_url)}` : "";
+        const articleLink = `/article.html?pais=${getCountrySlug(article.country_id)}&noticia=${generateSlug(article.title)}&id=${article.id}${imgParam}`;
         return `
           <a href="${articleLink}" class="trending-item" style="text-decoration: none; color: inherit;">
             <span class="trending-number">0${index + 1}</span>
@@ -714,7 +715,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const timeFormatted = rawDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     const dateFormatted = rawDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
     
-    const heroLink = `/article.html?pais=${getCountrySlug(heroArticle.country_id)}&noticia=${generateSlug(heroArticle.title)}&id=${heroArticle.id}`;
+    const heroImgParam = heroArticle.image_url ? `&imagen=${encodeURIComponent(heroArticle.image_url)}` : "";
+    const heroLink = `/article.html?pais=${getCountrySlug(heroArticle.country_id)}&noticia=${generateSlug(heroArticle.title)}&id=${heroArticle.id}${heroImgParam}`;
     heroContainer.innerHTML = `
       <a href="${heroLink}" class="hero-card" id="hero-article-card" style="text-decoration: none; color: inherit;">
         <div class="hero-image-wrapper">
@@ -751,7 +753,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const gridDate = new Date(article.published_at);
       const gridTimeStr = gridDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
       const gridDateStr = gridDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-      const articleLink = `/article.html?pais=${getCountrySlug(article.country_id)}&noticia=${generateSlug(article.title)}&id=${article.id}`;
+      const gridImgParam = article.image_url ? `&imagen=${encodeURIComponent(article.image_url)}` : "";
+      const articleLink = `/article.html?pais=${getCountrySlug(article.country_id)}&noticia=${generateSlug(article.title)}&id=${article.id}${gridImgParam}`;
 
       return `
         <a href="${articleLink}" class="news-card" style="text-decoration: none; color: inherit;">

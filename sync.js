@@ -271,7 +271,7 @@ async function generateDynamicSitemap() {
   try {
     const { data: latestArticles, error } = await supabase
       .from('articles')
-      .select('id, title, country_id, published_at')
+      .select('id, title, country_id, image_url, published_at')
       .order('published_at', { ascending: false })
       .limit(100);
 
@@ -280,7 +280,7 @@ async function generateDynamicSitemap() {
     const slugs = { CO: 'colombia', MX: 'mexico', US: 'usa', ES: 'espana' };
     const generateSlug = (t) => t.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-").substring(0, 60);
 
-    let sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
+    let sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
     
     // Static main routes
     sitemapXML += `  <url>\n    <loc>https://veredictofinal.com/</loc>\n    <changefreq>always</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
@@ -293,10 +293,12 @@ async function generateDynamicSitemap() {
     for (const art of latestArticles) {
       const countrySlug = slugs[art.country_id] || 'colombia';
       const newsSlug = generateSlug(art.title);
-      const articleUrl = `https://veredictofinal.com/article.html?pais=${countrySlug}&amp;noticia=${newsSlug}&amp;id=${art.id}`;
+      const imgParam = art.image_url ? `&amp;imagen=${encodeURIComponent(art.image_url)}` : '';
+      const articleUrl = `https://veredictofinal.com/article.html?pais=${countrySlug}&amp;noticia=${newsSlug}&amp;id=${art.id}${imgParam}`;
       const pubDate = new Date(art.published_at).toISOString();
+      const imageTag = art.image_url ? `\n    <image:image>\n      <image:loc>${art.image_url}</image:loc>\n    </image:image>` : '';
 
-      sitemapXML += `  <url>\n    <loc>${articleUrl}</loc>\n    <lastmod>${pubDate}</lastmod>\n    <changefreq>never</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+      sitemapXML += `  <url>\n    <loc>${articleUrl}</loc>\n    <lastmod>${pubDate}</lastmod>\n    <changefreq>never</changefreq>\n    <priority>0.8</priority>${imageTag}\n  </url>\n`;
     }
 
     sitemapXML += `</urlset>`;
