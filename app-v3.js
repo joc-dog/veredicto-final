@@ -784,28 +784,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   const initYoutubeSubscriptions = () => {
     const channels = {
       sin_filtros: {
-        baseSubs: 11400,
+        name: "Veredicto Final Sin Filtros",
         url: "https://www.youtube.com/@veredicto_final_sin_filtros",
-        format: (num) => `${(num / 1000).toFixed(1).replace(".", ",")} K suscriptores`,
         defaultState: true // Pre-subscribed mock
       },
       sin_censura: {
         name: "Veredicto Final Sin Censura",
-        baseSubs: 445,
         url: "https://www.youtube.com/@veredictofinalsincensura",
-        format: (num) => `${num} suscriptores`,
         defaultState: true
       },
       sin_rollos: {
-        baseSubs: 19,
+        name: "Veredicto Final Sin Rollos",
         url: "https://www.youtube.com/@veredictofinalsinrollos",
-        format: (num) => `${num} suscriptores`,
         defaultState: true
       },
       usa: {
-        baseSubs: 20,
+        name: "Veredicto Final USA",
         url: "https://www.youtube.com/@veredictofinalusa",
-        format: (num) => `${num} suscriptores`,
         defaultState: false
       }
     };
@@ -813,9 +808,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     Object.keys(channels).forEach(id => {
       const channel = channels[id];
       const btn = document.getElementById(`btn-subs-${id}`);
-      const textSpan = document.getElementById(`subs-${id}`);
-
-      if (!btn || !textSpan) return;
+      if (!btn) return;
 
       // Read from localStorage, fallback to default state
       let isSubscribed = localStorage.getItem(`yt_sub_${id}`);
@@ -827,8 +820,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const updateUI = () => {
-        const count = channel.baseSubs + (isSubscribed ? 1 : 0);
-        textSpan.textContent = channel.format(count);
         if (isSubscribed) {
           btn.textContent = "Suscrito/a";
           btn.classList.add("subscribed");
@@ -848,8 +839,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateUI();
 
         if (isSubscribed) {
-          const chName = id === "sin_censura" ? "Veredicto Final Sin Censura" : id === "usa" ? "Veredicto Final USA" : id === "sin_filtros" ? "Veredicto Final Sin Filtros" : "Veredicto Final Sin Rollos";
-          showToast("¡Suscrito!", `Te has suscrito a ${chName}.`, "success");
+          showToast("¡Suscrito!", `Te has suscrito a ${channel.name}.`, "success");
         } else {
           showToast("Suscripción cancelada", "Has cancelado tu suscripción local.", "info");
         }
