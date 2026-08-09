@@ -211,80 +211,7 @@ body.mexico-active .country-slider {
   gap: 16px;
 }
 
-/* Responsive Header: Centered Logo & Countries Underneath */
-@media (max-width: 820px) {
-  header {
-    padding-top: 6px;
-    padding-bottom: 8px;
-  }
 
-  .header-container {
-    height: auto;
-    padding: 8px 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    position: relative;
-  }
-
-  .logo-wrapper {
-    margin: 0 auto;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .logo-text {
-    font-size: 21px;
-    letter-spacing: -0.5px;
-  }
-
-  .country-selector {
-    width: 100%;
-    max-width: 440px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    padding: 3px;
-  }
-
-  .country-btn {
-    min-width: 0;
-    padding: 6px 4px;
-    font-size: 13px;
-    flex: 1;
-    text-align: center;
-  }
-
-  .header-utilities, .header-actions {
-    position: absolute;
-    top: 10px;
-    right: 16px;
-    gap: 8px;
-  }
-
-  .search-box {
-    display: none; /* Keep mobile header clean and focused */
-  }
-
-  .theme-toggle-btn, .theme-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 420px) {
-  .logo-text {
-    font-size: 18.5px;
-  }
-
-  .country-btn {
-    font-size: 11.5px;
-    padding: 5px 2px;
-  }
-}
 
 .search-box {
   position: relative;
@@ -347,6 +274,113 @@ body.dark-theme .theme-toggle-btn .moon-icon {
 
 body.dark-theme .theme-toggle-btn .sun-icon {
   display: block;
+}
+
+/* Responsive Header: 1. Centered Logo, 2. Countries Underneath, 3. Search Bar Underneath */
+@media (max-width: 820px) {
+  header {
+    padding: 12px 0 14px 0;
+  }
+
+  .header-container {
+    height: auto;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    max-width: 100%;
+  }
+
+  /* 1. Logo Row: Center aligned */
+  .logo-wrapper {
+    order: 1;
+    margin: 0 auto;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .logo-text {
+    font-size: 21px;
+    letter-spacing: -0.5px;
+  }
+
+  /* Theme Button: Top-Right Corner */
+  .theme-toggle-btn, .theme-btn {
+    position: absolute;
+    top: 0;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    font-size: 15px;
+    z-index: 10;
+  }
+
+  /* 2. Country Selector Row: Under Logo */
+  .country-selector {
+    order: 2;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 3px;
+  }
+
+  .country-btn {
+    min-width: 0;
+    padding: 7px 4px;
+    font-size: 13px;
+    flex: 1;
+    text-align: center;
+  }
+
+  /* 3. Search Bar Row: Under Countries */
+  .header-utilities, .header-actions {
+    order: 3;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    position: static;
+    gap: 0;
+  }
+
+  .search-box {
+    width: 100%;
+    display: flex;
+    position: relative;
+    margin: 0;
+  }
+
+  .search-input, #search-input, #article-search {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 10px 16px 10px 38px;
+    font-size: 13.5px;
+    border-radius: 20px;
+    box-sizing: border-box;
+  }
+
+  .search-input:focus, #search-input:focus, #article-search:focus {
+    width: 100% !important;
+  }
+
+  .search-icon {
+    left: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .logo-text {
+    font-size: 18.5px;
+  }
+
+  .country-btn {
+    font-size: 11.5px;
+    padding: 5px 2px;
+  }
 }
 
 /* Main Layout Grid */
