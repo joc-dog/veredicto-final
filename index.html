@@ -66,10 +66,56 @@
   
   <!-- Primary SEO Tags -->
   <title>Veredicto Final | El Portal de Noticias de Colombia y México</title>
-  <meta name="title" content="Veredicto Final | El Portal de Noticias de Colombia y México">
-  <meta name="description" content="Portal de noticias independiente para una lectura rápida de Colombia y México. Disfruta de un diseño premium con modo oscuro, widgets locales e interfaz interactiva.">
-  <meta name="keywords" content="Noticias, Colombia, México, Veredicto Final, Clima, Divisas, Diseño Premium">
-  <meta name="robots" content="index, follow">
+  <meta name="title" content="Veredicto Final | Portal de Noticias de Colombia, México, EE. UU. y España">
+  <meta name="description" content="Veredicto Final (veredictofinal.com) es el portal de periodismo digital con noticias de última hora, política, economía y deportes de Colombia, México, Estados Unidos y España.">
+  <meta name="keywords" content="Noticias, Colombia, México, Estados Unidos, España, Veredicto Final, veredictofinal.com, Clima, Divisas">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+  <!-- Knowledge Graph / Schema.org for Google Search & AI Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "NewsMediaOrganization",
+        "@id": "https://veredictofinal.com/#organization",
+        "name": "Veredicto Final",
+        "url": "https://veredictofinal.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://veredictofinal.com/assets/favicon.png",
+          "width": 64,
+          "height": 64
+        },
+        "description": "Portal de periodismo digital y noticias de última hora en español con cobertura en tiempo real de Colombia, México, Estados Unidos y España.",
+        "sameAs": [
+          "https://www.youtube.com/@veredicto_final_sin_filtros",
+          "https://www.youtube.com/@veredictofinalsincensura",
+          "https://www.youtube.com/@veredictofinalsinrollos",
+          "https://www.youtube.com/@veredictofinalusa"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://veredictofinal.com/#website",
+        "url": "https://veredictofinal.com/",
+        "name": "Veredicto Final",
+        "alternateName": ["VeredictoFinal", "Veredicto Final Noticias", "veredictofinal.com"],
+        "description": "Portal internacional de noticias de Colombia, México, Estados Unidos y España.",
+        "publisher": {
+          "@id": "https://veredictofinal.com/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://veredictofinal.com/?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
