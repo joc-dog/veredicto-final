@@ -390,6 +390,35 @@ body.dark-theme .theme-toggle-btn .sun-icon {
   padding: 32px 24px;
 }
 
+/* Page Main Section Heading (H1) */
+.page-main-heading {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-main-heading::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 24px;
+  background-color: var(--accent-orange);
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .page-main-heading {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+}
+
 .dashboard-layout {
   display: grid;
   grid-template-columns: 1fr 350px;

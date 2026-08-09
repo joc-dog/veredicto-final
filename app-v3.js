@@ -850,7 +850,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   };
 
+  const updatePageMainHeading = () => {
+    const headingNames = {
+      CO: "Últimas Noticias Colombia",
+      MX: "Últimas Noticias México",
+      US: "Últimas Noticias Estados Unidos",
+      ES: "Últimas Noticias España"
+    };
+    const headingEl = document.getElementById("page-main-heading");
+    if (headingEl) {
+      headingEl.textContent = headingNames[state.activeCountry] || `Últimas Noticias ${state.activeCountry}`;
+    }
+  };
+
   const renderApp = async () => {
+    updatePageMainHeading();
     renderWidgets();
     renderTrending();
     renderArticles();
