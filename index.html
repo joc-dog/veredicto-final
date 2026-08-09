@@ -12,9 +12,10 @@
   </script>
 
   <script>
-    // Smart Geo & Preferred Country Auto-Detection
+    // Smart Geo & Preferred Country Auto-Detection (Skipped for Googlebot and search crawlers)
     (function() {
-      if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+      var isCrawler = /bot|googlebot|crawler|spider|robot|crawling|google-extended|bingbot|mediapartners-google/i.test(navigator.userAgent || "");
+      if (!isCrawler && (window.location.pathname === "/" || window.location.pathname === "/index.html")) {
         // 1. Check if user has a previously saved manual preference
         var saved = localStorage.getItem("user_preferred_country");
         if (saved && ["colombia", "mexico", "usa", "espana"].indexOf(saved) !== -1) {
