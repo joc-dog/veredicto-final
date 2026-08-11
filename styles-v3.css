@@ -904,6 +904,219 @@ body.dark-theme .theme-toggle-btn .sun-icon {
   color: var(--text-primary);
 }
 
+/* Seismic Activity Widget */
+.seismic-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.seismic-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.seismic-header .sidebar-title {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.live-pulse-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.dark-theme .live-pulse-badge {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  animation: pulse-ring 1.8s infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.seismic-subtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seismic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.seismic-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-fast);
+}
+
+.seismic-item:hover {
+  transform: translateX(4px);
+  border-color: rgba(var(--accent-orange-rgb), 0.4);
+  background-color: var(--bg-secondary);
+}
+
+.mag-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mag-badge-val {
+  font-size: 14.5px;
+}
+
+.mag-badge-unit {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* Magnitude levels */
+.mag-low {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: #059669;
+}
+.dark-theme .mag-low {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+}
+
+.mag-med {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  color: #d97706;
+}
+.dark-theme .mag-med {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+}
+
+.mag-high {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #dc2626;
+}
+.dark-theme .mag-high {
+  background: rgba(239, 68, 68, 0.22);
+  color: #f87171;
+}
+
+.seismic-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+  gap: 3px;
+}
+
+.seismic-place {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.seismic-item:hover .seismic-place {
+  color: var(--accent-orange);
+}
+
+.seismic-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.seismic-meta-divider {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+}
+
+.seismic-empty {
+  text-align: center;
+  padding: 16px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  background-color: var(--bg-tertiary);
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}
+
+.seismic-item-link-icon {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 4px;
+  transition: var(--transition-fast);
+}
+
+.seismic-item:hover .seismic-item-link-icon {
+  color: var(--accent-orange);
+  transform: translateX(2px);
+}
+
 /* Trending List styling */
 .trending-list {
   display: flex;

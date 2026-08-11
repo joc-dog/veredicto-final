@@ -100,7 +100,7 @@
   <meta property="twitter:image" content="assets/colombia_hero.png">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="/styles-v3.css?v=26">
+  <link rel="stylesheet" href="/styles-v3.css?v=28">
   
   <!-- FontAwesome Icons for modern aesthetic -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -227,6 +227,23 @@
           <div class="currency-box" id="currency-box"></div>
         </section>
 
+        <!-- Seismic Activity Widget / Monitor Sísmico -->
+        <section class="sidebar-card seismic-card" aria-label="Monitor sísmico en tiempo real">
+          <div class="seismic-header">
+            <h2 class="sidebar-title"><i class="fa-solid fa-house-crack"></i> Monitor Sísmico</h2>
+            <span class="live-pulse-badge"><span class="pulse-dot"></span> EN VIVO</span>
+          </div>
+          <div class="seismic-subtitle" id="seismic-subtitle">
+            <span>Reportes oficiales (USGS)</span>
+            <span>USGS</span>
+          </div>
+          <div class="seismic-list" id="seismic-list">
+            <div style="text-align: center; padding: 18px; color: var(--text-muted); font-size: 12px;">
+              <i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px; color: var(--accent-orange);"></i> Cargando sismos recientes...
+            </div>
+          </div>
+        </section>
+
         <!-- Lo más leído (Trending list) -->
         <section class="sidebar-card trending-card" aria-label="Noticias más leídas">
           <h2 class="sidebar-title"><i class="fa-solid fa-fire"></i> Tendencias</h2>
@@ -301,6 +318,6 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/supabaseConfig.js?v=2"></script>
-  <script src="/app-v3.js?v=27"></script>
+  <script src="/app-v3.js?v=28"></script>
 </body>
 </html>

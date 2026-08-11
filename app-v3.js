@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     countries: [],            // Dynamically loaded from database
     categories: [],            // Dynamically loaded from database
     usdRates: null,           // Live currency exchange rates
-    weatherData: null         // Live weather data
+    weatherData: null,        // Live weather data
+    seismicData: null         // Live USGS seismic activity data
   };
 
   // Helper to format authors and prevent grid wrapping issues
@@ -181,6 +182,67 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       console.error("Error al obtener clima:", err);
       state.weatherData = null; // Fallback to mocks
+    }
+  };
+
+  // Helper to translate USGS earthquake places to Spanish
+  const translateSeismicPlace = (place) => {
+    if (!place) return "Ubicación no especificada";
+    return place
+      .replace(/\bof\b/gi, "de")
+      .replace(/\bNNE\b/g, "al NNE")
+      .replace(/\bNNW\b/g, "al NNO")
+      .replace(/\bSSE\b/g, "al SSE")
+      .replace(/\bSSW\b/g, "al SSO")
+      .replace(/\bENE\b/g, "al ENE")
+      .replace(/\bESE\b/g, "al ESE")
+      .replace(/\bWNW\b/g, "al ONO")
+      .replace(/\bWSW\b/g, "al OSO")
+      .replace(/\bNE\b/g, "al NE")
+      .replace(/\bNW\b/g, "al NO")
+      .replace(/\bSE\b/g, "al SE")
+      .replace(/\bSW\b/g, "al SO")
+      .replace(/\bN\b/g, "al N")
+      .replace(/\bS\b/g, "al S")
+      .replace(/\bE\b/g, "al E")
+      .replace(/\bW\b/g, "al O")
+      .replace(/\bCA\b/g, "California, EE. UU.")
+      .replace(/\bB\.C\., MX\b/g, "B.C., México")
+      .replace(/\bMexico\b/g, "México")
+      .replace(/\bSpain\b/g, "España");
+  };
+
+  // Helper for relative time
+  const formatSeismicTime = (timestamp) => {
+    const diffMs = Date.now() - timestamp;
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return "Justo ahora";
+    if (diffMins < 60) return `Hace ${diffMins} min`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `Hace ${diffHours} h`;
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays === 1) return "Ayer";
+    return `Hace ${diffDays} d`;
+  };
+
+  // Fetch live seismic data from USGS API for the active country
+  const fetchLiveSeismic = async () => {
+    const configs = {
+      MX: { lat: 19.4326, lon: -99.1332, radius: 1400, minmag: 2.5 },
+      CO: { lat: 4.6097, lon: -74.0817, radius: 1200, minmag: 2.5 },
+      US: { lat: 36.7783, lon: -119.4179, radius: 1500, minmag: 2.5 },
+      ES: { lat: 37.5, lon: -3.5, radius: 1200, minmag: 1.5 }
+    };
+    const cfg = configs[state.activeCountry] || configs.MX;
+
+    try {
+      const res = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${cfg.lat}&longitude=${cfg.lon}&maxradiuskm=${cfg.radius}&minmagnitude=${cfg.minmag}&limit=4&orderby=time`);
+      if (!res.ok) throw new Error("Seismic API fetch failed");
+      const data = await res.json();
+      state.seismicData = data.features || [];
+    } catch (err) {
+      console.error("Error al obtener datos sísmicos:", err);
+      state.seismicData = [];
     }
   };
 
@@ -366,6 +428,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           document.querySelectorAll(".country-btn").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
 
+          state.weatherData = null;
+          state.seismicData = null;
           resetCategoryAndSearch();
           renderApp();
         }
@@ -640,6 +704,72 @@ document.addEventListener("DOMContentLoaded", async () => {
     `).join("");
   };
 
+  const renderSeismicWidget = () => {
+    const seismicList = document.getElementById("seismic-list");
+    const seismicSubtitle = document.getElementById("seismic-subtitle");
+    if (!seismicList) return;
+
+    const countryNames = {
+      CO: "Colombia",
+      MX: "México",
+      US: "EE. UU.",
+      ES: "España"
+    };
+    const cName = countryNames[state.activeCountry] || "la región";
+
+    if (seismicSubtitle) {
+      seismicSubtitle.innerHTML = `<span>Reportes oficiales en ${cName}</span><span>USGS</span>`;
+    }
+
+    const earthquakes = state.seismicData;
+
+    if (earthquakes === null) {
+      seismicList.innerHTML = `
+        <div style="text-align: center; padding: 18px; color: var(--text-muted); font-size: 12px;">
+          <i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px; color: var(--accent-orange);"></i> Cargando sismos recientes...
+        </div>
+      `;
+      return;
+    }
+
+    if (!earthquakes || earthquakes.length === 0) {
+      seismicList.innerHTML = `
+        <div class="seismic-empty">
+          <i class="fa-solid fa-shield-halved" style="color: var(--text-muted); margin-bottom: 4px; font-size: 18px; display: block;"></i>
+          <div>Sin actividad sísmica reciente de riesgo en ${cName}</div>
+        </div>
+      `;
+      return;
+    }
+
+    seismicList.innerHTML = earthquakes.map(item => {
+      const mag = (item.properties.mag || 0).toFixed(1);
+      const magVal = parseFloat(mag);
+      const magClass = magVal >= 5.0 ? 'mag-high' : (magVal >= 4.0 ? 'mag-med' : 'mag-low');
+      const placeFormatted = translateSeismicPlace(item.properties.place);
+      const relTime = formatSeismicTime(item.properties.time);
+      const depth = item.geometry?.coordinates?.[2] ? `${Math.round(item.geometry.coordinates[2])} km prof.` : '';
+      const url = item.properties.url || '#';
+
+      return `
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="seismic-item" title="Ver reporte oficial en USGS">
+          <div class="mag-badge ${magClass}">
+            <span class="mag-badge-val">${mag}</span>
+            <span class="mag-badge-unit">MAG</span>
+          </div>
+          <div class="seismic-info">
+            <span class="seismic-place">${placeFormatted}</span>
+            <div class="seismic-meta">
+              <span>${relTime}</span>
+              ${depth ? `<span class="seismic-meta-divider"></span><span>${depth}</span>` : ''}
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square seismic-item-link-icon"></i>
+        </a>
+      `;
+    }).join("");
+  };
+
   const renderTrending = async () => {
     try {
       const { data: trending, error } = await supabase
@@ -866,12 +996,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const renderApp = async () => {
     updatePageMainHeading();
     renderWidgets();
+    renderSeismicWidget();
     renderTrending();
     renderArticles();
 
     // Fetch weather dynamically in the background and update widget
     fetchLiveWeather().then(() => {
       renderWidgets();
+    });
+
+    // Fetch seismic reports dynamically in the background and update widget
+    fetchLiveSeismic().then(() => {
+      renderSeismicWidget();
     });
   };
 
@@ -917,6 +1053,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         });
 
+        state.weatherData = null;
+        state.seismicData = null;
         resetCategoryAndSearch();
         renderApp();
       }
