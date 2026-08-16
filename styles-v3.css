@@ -63,6 +63,7 @@ body {
   color: var(--text-primary);
   transition: var(--transition-smooth);
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 a {
@@ -427,7 +428,19 @@ body.dark-theme .theme-toggle-btn .sun-icon {
 
 @media (max-width: 1024px) {
   .dashboard-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .primary-feed, .sidebar-container {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-wrapper {
+    padding: 20px 16px;
+  }
+  footer {
+    padding: 32px 16px;
   }
 }
 
@@ -1810,6 +1823,20 @@ footer {
   opacity: 1;
 }
 
+@media (max-width: 480px) {
+  .toast-container {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: auto;
+  }
+  .toast-notification {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 .toast-icon {
   font-size: 18px;
   display: flex;
@@ -1928,12 +1955,41 @@ footer {
 
 .yt-channel-logo {
   width: 120px;
-  height: 120px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 12px;
   border: 2px solid var(--border-color);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+  .youtube-channels-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .yt-channel-logo {
+    width: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .youtube-channels-grid {
+    gap: 12px;
+  }
+  .yt-channel-logo {
+    width: 75px;
+    margin-bottom: 8px;
+  }
+  .yt-channel-name {
+    font-size: 12.5px;
+  }
+  .yt-subscribe-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
 }
 
 .yt-channel-info {
